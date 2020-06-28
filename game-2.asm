@@ -1,5 +1,5 @@
 ; Disassembly of file: game.o
-; Sun Jun 28 18:48:26 2020
+; Sun Jun 28 18:23:04 2020
 ; Type: ELF64
 ; Syntax: NASM
 ; Instruction set: 80386, x64
@@ -78,7 +78,8 @@ writeStr:; Function begin
         mov     edx, 1                                  ; 004C _ BA, 00000001
         mov     rsi, rax                                ; 0051 _ 48: 89. C6
         mov     edi, 1                                  ; 0054 _ BF, 00000001
-        call    fun                                     ; 0059 _ E8, 00000000(PLT r)
+        mov     eax, 1
+        syscall
         add     dword [rbp-4H], 1                       ; 005E _ 83. 45, FC, 01
 ?_002:  mov     eax, dword [rbp-4H]                     ; 0062 _ 8B. 45, FC
         movsxd  rdx, eax                                ; 0065 _ 48: 63. D0
@@ -98,7 +99,8 @@ writeSpace:; Function begin
         mov     edx, 1                                  ; 0081 _ BA, 00000001
         lea     rsi, [rel ?_021]                        ; 0086 _ 48: 8D. 35, 00000000(rel)
         mov     edi, 1                                  ; 008D _ BF, 00000001
-        call    fun                                     ; 0092 _ E8, 00000000(PLT r)
+        mov     eax, 1
+        syscall
         nop                                             ; 0097 _ 90
         pop     rbp                                     ; 0098 _ 5D
         ret                                             ; 0099 _ C3
@@ -220,11 +222,13 @@ main:   ; Function begin
         mov     edx, 7                                  ; 01E1 _ BA, 00000007
         lea     rsi, [rel pre5]                         ; 01E6 _ 48: 8D. 35, 00000000(rel)
         mov     edi, 1                                  ; 01ED _ BF, 00000001
-        call    fun                                     ; 01F2 _ E8, 00000000(PLT r)
+        mov     eax, 1
+        syscall
         mov     edx, 5                                  ; 01F7 _ BA, 00000005
         lea     rsi, [rel buf]                          ; 01FC _ 48: 8D. 35, 00000000(rel)
         mov     edi, 0                                  ; 0203 _ BF, 00000000
-        call    fun2                                    ; 0208 _ E8, 00000000(PLT r)
+        mov     eax, 0
+        syscall
         movzx   eax, byte [rel buf]                     ; 020D _ 0F B6. 05, 00000000(rel)
         cmp     al, 49                                  ; 0214 _ 3C, 31
         jnz     ?_011                                   ; 0216 _ 75, 0C
@@ -247,104 +251,107 @@ main:   ; Function begin
         mov     edi, eax                                ; 0260 _ 89. C7
         call    generateQuestion                        ; 0262 _ E8, 00000000(PLT r)
         mov     dword [rbp-4H], 0                       ; 0267 _ C7. 45, FC, 00000000
-        jmp     ?_020                                   ; 026E _ E9, 000001A5
+        jmp     ?_020                                   ; 026E _ E9, 0000018F
 
 ?_014:  mov     dword [rbp-4H], 0                       ; 0273 _ C7. 45, FC, 00000000
-        mov     edx, 24                                 ; 027A _ BA, 00000018
-        lea     rsi, [rel state4]                       ; 027F _ 48: 8D. 35, 00000000(rel)
-        mov     edi, 1                                  ; 0286 _ BF, 00000001
-        call    fun                                     ; 028B _ E8, 00000000(PLT r)
-        mov     eax, 0                                  ; 0290 _ B8, 00000000
-        call    writeSpace                              ; 0295 _ E8, 00000000(PLT r)
-        mov     edx, 50                                 ; 029A _ BA, 00000032
-        lea     rsi, [rel buf]                          ; 029F _ 48: 8D. 35, 00000000(rel)
-        mov     edi, 0                                  ; 02A6 _ BF, 00000000
-        call    fun2                                    ; 02AB _ E8, 00000000(PLT r)
-        mov     eax, dword [rel target]                 ; 02B0 _ 8B. 05, 00000000(rel)
-        mov     edi, eax                                ; 02B6 _ 89. C7
-        call    parseNum                                ; 02B8 _ E8, 00000000(PLT r)
-        mov     eax, 0                                  ; 02BD _ B8, 00000000
-        call    clearbuf                                ; 02C2 _ E8, 00000000(PLT r)
-        mov     dword [rbp-8H], 0                       ; 02C7 _ C7. 45, F8, 00000000
-        jmp     ?_019                                   ; 02CE _ E9, 000000F4
+        mov     edx, 50                                 ; 027A _ BA, 00000032
+        lea     rsi, [rel buf]                          ; 027F _ 48: 8D. 35, 00000000(rel)
+        mov     edi, 0                                  ; 0286 _ BF, 00000000
+        mov     eax, 0
+        syscall
+        mov     eax, dword [rel target]                 ; 0290 _ 8B. 05, 00000000(rel)
+        mov     edi, eax                                ; 0296 _ 89. C7
+        call    parseNum                                ; 0298 _ E8, 00000000(PLT r)
+        mov     eax, 0                                  ; 029D _ B8, 00000000
+        call    clearbuf                                ; 02A2 _ E8, 00000000(PLT r)
+        mov     dword [rbp-8H], 1                       ; 02A7 _ C7. 45, F8, 00000001
+        jmp     ?_019                                   ; 02AE _ E9, 000000FE
 
-?_015:  mov     eax, dword [rbp-8H]                     ; 02D3 _ 8B. 45, F8
-        add     eax, 49                                 ; 02D6 _ 83. C0, 31
-        mov     byte [rel state2], al                   ; 02D9 _ 88. 05, 00000000(rel)
-        mov     edx, 17                                 ; 02DF _ BA, 00000011
-        lea     rsi, [rel state5]                       ; 02E4 _ 48: 8D. 35, 00000000(rel)
-        mov     edi, 1                                  ; 02EB _ BF, 00000001
-        call    fun                                     ; 02F0 _ E8, 00000000(PLT r)
-        mov     edx, 4                                  ; 02F5 _ BA, 00000004
-        lea     rsi, [rel state2]                       ; 02FA _ 48: 8D. 35, 00000000(rel)
-        mov     edi, 1                                  ; 0301 _ BF, 00000001
-        call    fun                                     ; 0306 _ E8, 00000000(PLT r)
-        mov     eax, dword [rbp-8H]                     ; 030B _ 8B. 45, F8
-        cdqe                                            ; 030E _ 48: 98
-        lea     rdx, [rax*4]                            ; 0310 _ 48: 8D. 14 85, 00000000
-        lea     rax, [rel guess]                        ; 0318 _ 48: 8D. 05, 00000000(rel)
-        mov     edx, dword [rdx+rax]                    ; 031F _ 8B. 14 02
-        mov     eax, dword [rbp-8H]                     ; 0322 _ 8B. 45, F8
-        cdqe                                            ; 0325 _ 48: 98
-        lea     rcx, [rax*4]                            ; 0327 _ 48: 8D. 0C 85, 00000000
-        lea     rax, [rel number]                       ; 032F _ 48: 8D. 05, 00000000(rel)
-        mov     eax, dword [rcx+rax]                    ; 0336 _ 8B. 04 01
-        cmp     edx, eax                                ; 0339 _ 39. C2
-        jge     ?_016                                   ; 033B _ 7D, 18
-        mov     edx, 14                                 ; 033D _ BA, 0000000E
-        lea     rsi, [rel judge3]                       ; 0342 _ 48: 8D. 35, 00000000(rel)
-        mov     edi, 1                                  ; 0349 _ BF, 00000001
-        call    fun                                     ; 034E _ E8, 00000000(PLT r)
-        jmp     ?_018                                   ; 0353 _ EB, 64
+?_015:  mov     eax, dword [rbp-8H]                     ; 02B3 _ 8B. 45, F8
+        add     eax, 48                                 ; 02B6 _ 83. C0, 30
+        mov     byte [rel state2], al                   ; 02B9 _ 88. 05, 00000000(rel)
+        mov     edx, 17                                 ; 02BF _ BA, 00000011
+        lea     rsi, [rel state5]                       ; 02C4 _ 48: 8D. 35, 00000000(rel)
+        mov     edi, 1                                  ; 02CB _ BF, 00000001
+        mov     eax, 1
+        syscall
+        mov     edx, 4                                  ; 02D5 _ BA, 00000004
+        lea     rsi, [rel state2]                       ; 02DA _ 48: 8D. 35, 00000000(rel)
+        mov     edi, 1                                  ; 02E1 _ BF, 00000001
+        mov     eax, 1
+        syscall
+        mov     eax, dword [rbp-8H]                     ; 02EB _ 8B. 45, F8
+        cdqe                                            ; 02EE _ 48: 98
+        lea     rdx, [rax*4]                            ; 02F0 _ 48: 8D. 14 85, 00000000
+        lea     rax, [rel guess]                        ; 02F8 _ 48: 8D. 05, 00000000(rel)
+        mov     edx, dword [rdx+rax]                    ; 02FF _ 8B. 14 02
+        mov     eax, dword [rbp-8H]                     ; 0302 _ 8B. 45, F8
+        cdqe                                            ; 0305 _ 48: 98
+        lea     rcx, [rax*4]                            ; 0307 _ 48: 8D. 0C 85, 00000000
+        lea     rax, [rel number]                       ; 030F _ 48: 8D. 05, 00000000(rel)
+        mov     eax, dword [rcx+rax]                    ; 0316 _ 8B. 04 01
+        cmp     edx, eax                                ; 0319 _ 39. C2
+        jge     ?_016                                   ; 031B _ 7D, 18
+        mov     edx, 14                                 ; 031D _ BA, 0000000E
+        lea     rsi, [rel judge3]                       ; 0322 _ 48: 8D. 35, 00000000(rel)
+        mov     edi, 1                                  ; 0329 _ BF, 00000001
+        mov     eax, 1
+        syscall
+        jmp     ?_018                                   ; 0333 _ EB, 6E
 
-?_016:  mov     eax, dword [rbp-8H]                     ; 0355 _ 8B. 45, F8
-        cdqe                                            ; 0358 _ 48: 98
-        lea     rdx, [rax*4]                            ; 035A _ 48: 8D. 14 85, 00000000
-        lea     rax, [rel guess]                        ; 0362 _ 48: 8D. 05, 00000000(rel)
-        mov     edx, dword [rdx+rax]                    ; 0369 _ 8B. 14 02
-        mov     eax, dword [rbp-8H]                     ; 036C _ 8B. 45, F8
-        cdqe                                            ; 036F _ 48: 98
-        lea     rcx, [rax*4]                            ; 0371 _ 48: 8D. 0C 85, 00000000
-        lea     rax, [rel number]                       ; 0379 _ 48: 8D. 05, 00000000(rel)
-        mov     eax, dword [rcx+rax]                    ; 0380 _ 8B. 04 01
-        cmp     edx, eax                                ; 0383 _ 39. C2
-        jle     ?_017                                   ; 0385 _ 7E, 18
-        mov     edx, 14                                 ; 0387 _ BA, 0000000E
-        lea     rsi, [rel judge2]                       ; 038C _ 48: 8D. 35, 00000000(rel)
-        mov     edi, 1                                  ; 0393 _ BF, 00000001
-        call    fun                                     ; 0398 _ E8, 00000000(PLT r)
-        jmp     ?_018                                   ; 039D _ EB, 1A
+?_016:  mov     eax, dword [rbp-8H]                     ; 0335 _ 8B. 45, F8
+        cdqe                                            ; 0338 _ 48: 98
+        lea     rdx, [rax*4]                            ; 033A _ 48: 8D. 14 85, 00000000
+        lea     rax, [rel guess]                        ; 0342 _ 48: 8D. 05, 00000000(rel)
+        mov     edx, dword [rdx+rax]                    ; 0349 _ 8B. 14 02
+        mov     eax, dword [rbp-8H]                     ; 034C _ 8B. 45, F8
+        cdqe                                            ; 034F _ 48: 98
+        lea     rcx, [rax*4]                            ; 0351 _ 48: 8D. 0C 85, 00000000
+        lea     rax, [rel number]                       ; 0359 _ 48: 8D. 05, 00000000(rel)
+        mov     eax, dword [rcx+rax]                    ; 0360 _ 8B. 04 01
+        cmp     edx, eax                                ; 0363 _ 39. C2
+        jle     ?_017                                   ; 0365 _ 7E, 18
+        mov     edx, 14                                 ; 0367 _ BA, 0000000E
+        lea     rsi, [rel judge2]                       ; 036C _ 48: 8D. 35, 00000000(rel)
+        mov     edi, 1                                  ; 0373 _ BF, 00000001
+        mov     eax, 1
+        syscall
+        jmp     ?_018                                   ; 037D _ EB, 24
 
-?_017:  mov     edx, 5                                  ; 039F _ BA, 00000005
-        lea     rsi, [rel judge1]                       ; 03A4 _ 48: 8D. 35, 00000000(rel)
-        mov     edi, 1                                  ; 03AB _ BF, 00000001
-        call    fun                                     ; 03B0 _ E8, 00000000(PLT r)
-        add     dword [rbp-4H], 1                       ; 03B5 _ 83. 45, FC, 01
-?_018:  mov     eax, 0                                  ; 03B9 _ B8, 00000000
-        call    writeSpace                              ; 03BE _ E8, 00000000(PLT r)
-        add     dword [rbp-8H], 1                       ; 03C3 _ 83. 45, F8, 01
-?_019:  mov     eax, dword [rel target]                 ; 03C7 _ 8B. 05, 00000000(rel)
-        cmp     dword [rbp-8H], eax                     ; 03CD _ 39. 45, F8
-        jl      ?_015                                   ; 03D0 _ 0F 8C, FFFFFEFD
-        mov     eax, dword [rbp-4H]                     ; 03D6 _ 8B. 45, FC
-        add     eax, 48                                 ; 03D9 _ 83. C0, 30
-        mov     byte [rel state2], al                   ; 03DC _ 88. 05, 00000000(rel)
-        mov     edx, 23                                 ; 03E2 _ BA, 00000017
-        lea     rsi, [rel state1]                       ; 03E7 _ 48: 8D. 35, 00000000(rel)
+?_017:  mov     edx, 5                                  ; 037F _ BA, 00000005
+        lea     rsi, [rel judge1]                       ; 0384 _ 48: 8D. 35, 00000000(rel)
+        mov     edi, 1                                  ; 038B _ BF, 00000001
+        mov     eax, 1
+        syscall
+        mov     eax, 0                                  ; 0395 _ B8, 00000000
+        call    writeSpace                              ; 039A _ E8, 00000000(PLT r)
+        add     dword [rbp-4H], 1                       ; 039F _ 83. 45, FC, 01
+?_018:  mov     eax, 0                                  ; 03A3 _ B8, 00000000
+        call    writeSpace                              ; 03A8 _ E8, 00000000(PLT r)
+        add     dword [rbp-8H], 1                       ; 03AD _ 83. 45, F8, 01
+?_019:  mov     eax, dword [rel target]                 ; 03B1 _ 8B. 05, 00000000(rel)
+        cmp     dword [rbp-8H], eax                     ; 03B7 _ 39. 45, F8
+        jle     ?_015                                   ; 03BA _ 0F 8E, FFFFFEF3
+        mov     eax, dword [rbp-4H]                     ; 03C0 _ 8B. 45, FC
+        add     eax, 48                                 ; 03C3 _ 83. C0, 30
+        mov     byte [rel state2], al                   ; 03C6 _ 88. 05, 00000000(rel)
+        mov     edx, 23                                 ; 03CC _ BA, 00000017
+        lea     rsi, [rel state1]                       ; 03D1 _ 48: 8D. 35, 00000000(rel)
+        mov     edi, 1                                  ; 03D8 _ BF, 00000001
+        mov     eax, 1
+        syscall
+        mov     edx, 1                                  ; 03E2 _ BA, 00000001
+        lea     rsi, [rel state2]                       ; 03E7 _ 48: 8D. 35, 00000000(rel)
         mov     edi, 1                                  ; 03EE _ BF, 00000001
-        call    fun                                     ; 03F3 _ E8, 00000000(PLT r)
-        mov     edx, 1                                  ; 03F8 _ BA, 00000001
-        lea     rsi, [rel state2]                       ; 03FD _ 48: 8D. 35, 00000000(rel)
-        mov     edi, 1                                  ; 0404 _ BF, 00000001
-        call    fun                                     ; 0409 _ E8, 00000000(PLT r)
-        mov     eax, 0                                  ; 040E _ B8, 00000000
-        call    writeSpace                              ; 0413 _ E8, 00000000(PLT r)
-?_020:  mov     eax, dword [rel target]                 ; 0418 _ 8B. 05, 00000000(rel)
-        cmp     dword [rbp-4H], eax                     ; 041E _ 39. 45, FC
-        jl      ?_014                                   ; 0421 _ 0F 8C, FFFFFE4C
-        mov     eax, 0                                  ; 0427 _ B8, 00000000
-        leave                                           ; 042C _ C9
-        ret                                             ; 042D _ C3
+        mov     eax, 1
+        syscall
+        mov     eax, 0                                  ; 03F8 _ B8, 00000000
+        call    writeSpace                              ; 03FD _ E8, 00000000(PLT r)
+?_020:  mov     eax, dword [rel target]                 ; 0402 _ 8B. 05, 00000000(rel)
+        cmp     dword [rbp-4H], eax                     ; 0408 _ 39. 45, FC
+        jl      ?_014                                   ; 040B _ 0F 8C, FFFFFE62
+        mov     eax, 60
+        syscall
 ; main End of function
 
 
@@ -523,8 +530,8 @@ SECTION .eh_frame align=8                               ; section number 5, cons
         dd 00000008H, 0000001CH                         ; 0114 _ 8 28 
         dd 0000011CH                                    ; 011C _ 284 
         dd fun-$+0B9H                                   ; 0120 _ 00000000 (rel)
-        dd 00000255H, 100E4100H                         ; 0124 _ 597 269369600 
-        dd 0D430286H, 02500306H                         ; 012C _ 222495366 38798086 
+        dd 0000023FH, 100E4100H                         ; 0124 _ 575 269369600 
+        dd 0D430286H, 023A0306H                         ; 012C _ 222495366 37356294 
         dd 0008070CH                                    ; 0134 _ 526092 
 
 
