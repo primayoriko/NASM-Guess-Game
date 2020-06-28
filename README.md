@@ -10,24 +10,28 @@ A guessing number game consists of 3 levels written in NASM assembly.
 ## How to compile, link, and open 
 ------------------
 To run/execute the asm file (we have *game.asm* here), there are two methods.
-First method,
+The first method,
 
-    Run *run.sh* in the root folder of this repo
+    Run run.sh file in the root folder of this repo
 
-Second method (manually via terminal),
+or in terminal write and execute
+
+    ./run.sh
+
+Or use the second method (manually via terminal),
 
 1. Open your terminal
 2. Write and execute this to compile into object file
    
-    nasm -f elf64 game.asm -o game.o
+        nasm -f elf64 game.asm -o game.o
 
 3. Write and execute this to link into executable (elf) file
    
-    ld game.o -o game -e main
+        ld game.o -o game -e main
 
 4. Write and execute to run the program
    
-    ./game
+        ./game
 
 
 # How to use
