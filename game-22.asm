@@ -10,7 +10,7 @@ global fun
 global fun2
 global time
 global writeStr
-global writeNewline
+global writeSpace
 global generateNum
 global generateQuestion
 global parseNum
@@ -101,7 +101,7 @@ writeStr:; Function begin
         ret                                             ; 008B _ C3
 ; writeStr End of function
 
-writeNewline:; Function begin
+writeSpace:; Function begin
         push    rbp                                     ; 008C _ 55
         mov     rbp, rsp                                ; 008D _ 48: 89. E5
         mov     edx, 1                                  ; 0090 _ BA, 00000001
@@ -112,7 +112,7 @@ writeNewline:; Function begin
         nop                                             ; 00A6 _ 90
         pop     rbp                                     ; 00A7 _ 5D
         ret                                             ; 00A8 _ C3
-; writeNewline End of function
+; writeSpace End of function
 
 generateNum:; Function begin
         push    rbp                                     ; 00A9 _ 55
@@ -120,70 +120,54 @@ generateNum:; Function begin
         mov     dword [rbp-4H], edi                     ; 00AD _ 89. 7D, FC
         mov     eax, dword [rbp-4H]                     ; 00B0 _ 8B. 45, FC
         imul    eax, eax, 307                           ; 00B3 _ 69. C0, 00000133
-        lea     edx, [rax+25FH]                         ; 00B9 _ 8D. 90, 0000025F
-        movsxd  rax, edx                                ; 00BF _ 48: 63. C2
-        imul    rax, rax, -2139062143                   ; 00C2 _ 48: 69. C0, 80808081
+        lea     ecx, [rax+25FH]                         ; 00B9 _ 8D. 88, 0000025F
+        movsxd  rax, ecx                                ; 00BF _ 48: 63. C1
+        imul    rax, rax, 780903145                     ; 00C2 _ 48: 69. C0, 2E8BA2E9
         shr     rax, 32                                 ; 00C9 _ 48: C1. E8, 20
-        add     eax, edx                                ; 00CD _ 01. D0
-        sar     eax, 7                                  ; 00CF _ C1. F8, 07
-        mov     ecx, eax                                ; 00D2 _ 89. C1
-        mov     eax, edx                                ; 00D4 _ 89. D0
-        sar     eax, 31                                 ; 00D6 _ C1. F8, 1F
-        sub     ecx, eax                                ; 00D9 _ 29. C1
-        mov     eax, ecx                                ; 00DB _ 89. C8
-        mov     ecx, eax                                ; 00DD _ 89. C1
-        shl     ecx, 8                                  ; 00DF _ C1. E1, 08
-        sub     ecx, eax                                ; 00E2 _ 29. C1
-        mov     eax, edx                                ; 00E4 _ 89. D0
-        sub     eax, ecx                                ; 00E6 _ 29. C8
-        add     eax, 1                                  ; 00E8 _ 83. C0, 01
-        mov     dword [rbp-4H], eax                     ; 00EB _ 89. 45, FC
-        cmp     dword [rbp-4H], 0                       ; 00EE _ 83. 7D, FC, 00
-        jg      ?_003                                   ; 00F2 _ 7F, 0A
-        mov     eax, dword [rbp-4H]                     ; 00F4 _ 8B. 45, FC
-        add     eax, 255                                ; 00F7 _ 05, 000000FF
-        jmp     ?_004                                   ; 00FC _ EB, 03
-
-?_003:  mov     eax, dword [rbp-4H]                     ; 00FE _ 8B. 45, FC
-?_004:  pop     rbp                                     ; 0101 _ 5D
-        ret                                             ; 0102 _ C3
+        mov     edx, eax                                ; 00CD _ 89. C2
+        sar     edx, 1                                  ; 00CF _ D1. FA
+        mov     eax, ecx                                ; 00D1 _ 89. C8
+        sar     eax, 31                                 ; 00D3 _ C1. F8, 1F
+        sub     edx, eax                                ; 00D6 _ 29. C2
+        mov     eax, edx                                ; 00D8 _ 89. D0
+        shl     eax, 2                                  ; 00DA _ C1. E0, 02
+        add     eax, edx                                ; 00DD _ 01. D0
+        add     eax, eax                                ; 00DF _ 01. C0
+        add     eax, edx                                ; 00E1 _ 01. D0
+        sub     ecx, eax                                ; 00E3 _ 29. C1
+        mov     edx, ecx                                ; 00E5 _ 89. CA
+        lea     eax, [rdx+1H]                           ; 00E7 _ 8D. 42, 01
+        pop     rbp                                     ; 00EA _ 5D
+        ret                                             ; 00EB _ C3
 ; generateNum End of function
 
 generateQuestion:; Function begin
-        push    rbp                                     ; 0103 _ 55
-        mov     rbp, rsp                                ; 0104 _ 48: 89. E5
-        sub     rsp, 24                                 ; 0107 _ 48: 83. EC, 18
-        mov     dword [rbp-14H], edi                    ; 010B _ 89. 7D, EC
-        lea     rax, [rbp-10H]                          ; 010E _ 48: 8D. 45, F0
-        mov     rdi, rax                                ; 0112 _ 48: 89. C7
-        call    time                                    ; 0115 _ E8, 00000000(PLT r)
-        mov     rax, qword [rbp-10H]                    ; 011A _ 48: 8B. 45, F0
-        mov     edi, eax                                ; 011E _ 89. C7
-        call    generateNum                             ; 0120 _ E8, 00000000(PLT r)
-        mov     dword [rel number], eax                 ; 0125 _ 89. 05, 00000000(rel)
-        mov     dword [rbp-4H], 1                       ; 012B _ C7. 45, FC, 00000001
-        jmp     ?_106                                   ; 0132 _ EB, 3D
+        push    rbp                                     ; 00EC _ 55
+        mov     rbp, rsp                                ; 00ED _ 48: 89. E5
+        sub     rsp, 24                                 ; 00F0 _ 48: 83. EC, 18
+        mov     dword [rbp-14H], edi                    ; 00F4 _ 89. 7D, EC
+        mov     dword [rbp-4H], 0                       ; 00F7 _ C7. 45, FC, 00000000
+        jmp     ?_004                                   ; 00FE _ EB, 33
 
-?_105:  mov     eax, dword [rbp-4H]                     ; 0134 _ 8B. 45, FC
-        sub     eax, 1                                  ; 0137 _ 83. E8, 01
-        cdqe                                            ; 013A _ 48: 98
-        lea     rdx, [rax*4]                            ; 013C _ 48: 8D. 14 85, 00000000
-        lea     rax, [rel number]                       ; 0144 _ 48: 8D. 05, 00000000(rel)
-        mov     eax, dword [rdx+rax]                    ; 014B _ 8B. 04 02
-        mov     edi, eax                                ; 014E _ 89. C7
-        call    generateNum                             ; 0150 _ E8, 00000000(PLT r)
-        mov     edx, dword [rbp-4H]                     ; 0155 _ 8B. 55, FC
-        movsxd  rdx, edx                                ; 0158 _ 48: 63. D2
-        lea     rcx, [rdx*4]                            ; 015B _ 48: 8D. 0C 95, 00000000
-        lea     rdx, [rel number]                       ; 0163 _ 48: 8D. 15, 00000000(rel)
-        mov     dword [rcx+rdx], eax                    ; 016A _ 89. 04 11
-        add     dword [rbp-4H], 1                       ; 016D _ 83. 45, FC, 01
-?_106:  mov     eax, dword [rbp-4H]                     ; 0171 _ 8B. 45, FC
-        cmp     eax, dword [rbp-14H]                    ; 0174 _ 3B. 45, EC
-        jl      ?_105                                   ; 0177 _ 7C, BB
-        mov     eax, 0                                  ; 0179 _ B8, 00000000
-        leave                                           ; 017E _ C9
-        ret                                             ; 017F _ C3
+?_003:  lea     rax, [rbp-10H]                          ; 0100 _ 48: 8D. 45, F0
+        mov     rdi, rax                                ; 0104 _ 48: 89. C7
+        mov     eax, 201
+        syscall   
+        mov     rax, qword [rbp-10H]                    ; 010C _ 48: 8B. 45, F0
+        mov     edi, eax                                ; 0110 _ 89. C7
+        call    generateNum                             ; 0112 _ E8, 00000000(PLT r)
+        mov     edx, dword [rbp-4H]                     ; 0117 _ 8B. 55, FC
+        movsxd  rdx, edx                                ; 011A _ 48: 63. D2
+        lea     rcx, [rdx*4]                            ; 011D _ 48: 8D. 0C 95, 00000000
+        lea     rdx, [rel number]                       ; 0125 _ 48: 8D. 15, 00000000(rel)
+        mov     dword [rcx+rdx], eax                    ; 012C _ 89. 04 11
+        add     dword [rbp-4H], 1                       ; 012F _ 83. 45, FC, 01
+?_004:  mov     eax, dword [rbp-4H]                     ; 0133 _ 8B. 45, FC
+        cmp     eax, dword [rbp-14H]                    ; 0136 _ 3B. 45, EC
+        jl      ?_003                                   ; 0139 _ 7C, C5
+        mov     eax, 0                                  ; 013B _ B8, 00000000
+        leave                                           ; 0140 _ C9
+        ret                                             ; 0141 _ C3
 ; generateQuestion End of function
 
 parseNum:; Function begin
@@ -261,42 +245,42 @@ main:   ; Function begin
         mov     eax, 1
         syscall   
         mov     eax, 0                                  ; 021A _ B8, 00000000
-        call    writeNewline                              ; 021F _ E8, 00000000(PLT r)
+        call    writeSpace                              ; 021F _ E8, 00000000(PLT r)
         mov     edx, 22                                 ; 0224 _ BA, 00000016
         lea     rsi, [rel pre]                          ; 0229 _ 48: 8D. 35, 00000000(rel)
         mov     edi, 1                                  ; 0230 _ BF, 00000001
         mov     eax, 1
         syscall   
         mov     eax, 0                                  ; 023A _ B8, 00000000
-        call    writeNewline                              ; 023F _ E8, 00000000(PLT r)
+        call    writeSpace                              ; 023F _ E8, 00000000(PLT r)
         mov     edx, 24                                 ; 0244 _ BA, 00000018
         lea     rsi, [rel pre1]                         ; 0249 _ 48: 8D. 35, 00000000(rel)
         mov     edi, 1                                  ; 0250 _ BF, 00000001
         mov     eax, 1
         syscall   
         mov     eax, 0                                  ; 025A _ B8, 00000000
-        call    writeNewline                              ; 025F _ E8, 00000000(PLT r)
+        call    writeSpace                              ; 025F _ E8, 00000000(PLT r)
         mov     edx, 15                                 ; 0264 _ BA, 0000000F
         lea     rsi, [rel pre2]                         ; 0269 _ 48: 8D. 35, 00000000(rel)
         mov     edi, 1                                  ; 0270 _ BF, 00000001
         mov     eax, 1
         syscall   
         mov     eax, 0                                  ; 027A _ B8, 00000000
-        call    writeNewline                              ; 027F _ E8, 00000000(PLT r)
+        call    writeSpace                              ; 027F _ E8, 00000000(PLT r)
         mov     edx, 17                                 ; 0284 _ BA, 00000011
         lea     rsi, [rel pre3]                         ; 0289 _ 48: 8D. 35, 00000000(rel)
         mov     edi, 1                                  ; 0290 _ BF, 00000001
         mov     eax, 1
         syscall   
         mov     eax, 0                                  ; 029A _ B8, 00000000
-        call    writeNewline                              ; 029F _ E8, 00000000(PLT r)
+        call    writeSpace                              ; 029F _ E8, 00000000(PLT r)
         mov     edx, 15                                 ; 02A4 _ BA, 0000000F
         lea     rsi, [rel pre4]                         ; 02A9 _ 48: 8D. 35, 00000000(rel)
         mov     edi, 1                                  ; 02B0 _ BF, 00000001
         mov     eax, 1
         syscall   
         mov     eax, 0                                  ; 02BA _ B8, 00000000
-        call    writeNewline                              ; 02BF _ E8, 00000000(PLT r)
+        call    writeSpace                              ; 02BF _ E8, 00000000(PLT r)
         mov     edx, 7                                  ; 02C4 _ BA, 00000007
         lea     rsi, [rel pre5]                         ; 02C9 _ 48: 8D. 35, 00000000(rel)
         mov     edi, 1                                  ; 02D0 _ BF, 00000001
@@ -337,7 +321,7 @@ main:   ; Function begin
         mov     eax, 1
         syscall   
         mov     eax, 0                                  ; 036F _ B8, 00000000
-        call    writeNewline                              ; 0374 _ E8, 00000000(PLT r)
+        call    writeSpace                              ; 0374 _ E8, 00000000(PLT r)
         mov     edx, 50                                 ; 0379 _ BA, 00000032
         lea     rsi, [rel buf]                          ; 037E _ 48: 8D. 35, 00000000(rel)
         mov     edi, 0                                  ; 0385 _ BF, 00000000
@@ -349,7 +333,7 @@ main:   ; Function begin
         mov     eax, 0                                  ; 039C _ B8, 00000000
         call    clearbuf                                ; 03A1 _ E8, 00000000(PLT r)
         mov     eax, 0                                  ; 03A6 _ B8, 00000000
-        call    writeNewline                              ; 03AB _ E8, 00000000(PLT r)
+        call    writeSpace                              ; 03AB _ E8, 00000000(PLT r)
         mov     dword [rbp-4H], 0                       ; 03B0 _ C7. 45, FC, 00000000
         jmp     ?_019                                   ; 03B7 _ E9, 000000FF
 
@@ -413,7 +397,7 @@ main:   ; Function begin
         add     eax, 1                                  ; 04A4 _ 83. C0, 01
         mov     dword [rel correct], eax                ; 04A7 _ 89. 05, 00000000(rel)
 ?_018:  mov     eax, 0                                  ; 04AD _ B8, 00000000
-        call    writeNewline                              ; 04B2 _ E8, 00000000(PLT r)
+        call    writeSpace                              ; 04B2 _ E8, 00000000(PLT r)
         add     dword [rbp-4H], 1                       ; 04B7 _ 83. 45, FC, 01
 ?_019:  mov     eax, dword [rel target]                 ; 04BB _ 8B. 05, 00000000(rel)
         cmp     dword [rbp-4H], eax                     ; 04C1 _ 39. 45, FC
@@ -422,7 +406,7 @@ main:   ; Function begin
         add     eax, 48                                 ; 04D0 _ 83. C0, 30
         mov     byte [rel state2], al                   ; 04D3 _ 88. 05, 00000000(rel)
         mov     eax, 0                                  ; 04D9 _ B8, 00000000
-        call    writeNewline                              ; 04DE _ E8, 00000000(PLT r)
+        call    writeSpace                              ; 04DE _ E8, 00000000(PLT r)
         mov     edx, 23                                 ; 04E3 _ BA, 00000017
         lea     rsi, [rel state1]                       ; 04E8 _ 48: 8D. 35, 00000000(rel)
         mov     edi, 1                                  ; 04EF _ BF, 00000001
@@ -434,20 +418,20 @@ main:   ; Function begin
         mov     eax, 1
         syscall   
         mov     eax, 0                                  ; 050F _ B8, 00000000
-        call    writeNewline                              ; 0514 _ E8, 00000000(PLT r)
+        call    writeSpace                              ; 0514 _ E8, 00000000(PLT r)
 ?_020:  mov     edx, dword [rel correct]                ; 0519 _ 8B. 15, 00000000(rel)
         mov     eax, dword [rel target]                 ; 051F _ 8B. 05, 00000000(rel)
         cmp     edx, eax                                ; 0525 _ 39. C2
         jl      ?_014                                   ; 0527 _ 0F 8C, FFFFFE22
         mov     eax, 0                                  ; 052D _ B8, 00000000
-        call    writeNewline                              ; 0532 _ E8, 00000000(PLT r)
+        call    writeSpace                              ; 0532 _ E8, 00000000(PLT r)
         mov     edx, 35                                 ; 0537 _ BA, 00000023
         lea     rsi, [rel state3]                       ; 053C _ 48: 8D. 35, 00000000(rel)
         mov     edi, 1                                  ; 0543 _ BF, 00000001
         mov     eax, 1
         syscall   
         mov     eax, 0                                  ; 054D _ B8, 00000000
-        call    writeNewline                              ; 0552 _ E8, 00000000(PLT r)
+        call    writeSpace                              ; 0552 _ E8, 00000000(PLT r)
         mov     eax, 60
         syscall   
 ; main End of function
