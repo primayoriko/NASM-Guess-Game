@@ -448,6 +448,8 @@ main:   ; Function begin
         syscall   
         mov     eax, 0                                  ; 054D _ B8, 00000000
         call    writeNewline                              ; 0552 _ E8, 00000000(PLT r)
+        mov     eax, 0                                  ; 054D _ B8, 00000000
+        call    writeNewline                              ; 0552 _ E8, 00000000(PLT r)
         mov     eax, 60
         syscall   
 ; main End of function
