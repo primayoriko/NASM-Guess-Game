@@ -1,0 +1,7 @@
+*.zip
+*.c
+*.sh
+.gdb_history
+objconv
+
+objconvFolder/
