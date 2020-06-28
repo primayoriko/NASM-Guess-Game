@@ -1,6 +1,6 @@
 *.zip
 *.c
-*.sh
+cnasm.sh
 .gdb_history
 objconv
 
