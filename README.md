@@ -1,6 +1,8 @@
 # NASM Guessing Number Game
 A guessing number game consists of 3 levels written in NASM assembly.
 
+**Note** : For the final/latest version, please use *game.asm* or *game-finale.asm* assembly file.
+
 ## Requirement
 -------
 1. Linux (preferred in Ubuntu derivation) x64 architecture
