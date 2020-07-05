@@ -1,7 +1,7 @@
 # NASM Guessing Number Game
 A guessing number game consists of 3 levels written in NASM assembly.
 
-**Note** : For the final/latest version, please use *game.asm* or *game-finale.asm* assembly file.
+**Note** : For the final/latest version, please use *game.asm* assembly file.
 
 ## Requirement
 -------
