@@ -37,6 +37,6 @@ Or use the second method (manually via terminal),
 # How to use
 ------------------ 
 1. First select the difficulty and write the difficulty number in terminal.
-2. Input number (in range of 1 - 255) as many as the difficulty requested (for example, in easy you should write 3 numbers) in each turn, separated by space.
+2. Input number (in range of 0 - 255) as many as the difficulty requested (for example, in easy you should write 3 numbers) in each turn, separated by space.
 3. You will get judge based on the guess you done.
 4. Repeat according to the judge until you get all numbers guessed correctly.
