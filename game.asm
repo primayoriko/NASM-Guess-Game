@@ -1,4 +1,3 @@
-; Disassembly of file: game.o
 ; Sun Jul  5 15:34:21 2020
 ; Type: ELF64
 ; Syntax: NASM
